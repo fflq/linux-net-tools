@@ -349,6 +349,7 @@ int main(int argc, char *argv[])
 			   "wpa_supplicant");
 	}
 
+	printf("*fflq %s, before fst_global_init\n", __func__) ;
 	if (fst_global_init()) {
 		wpa_printf(MSG_ERROR, "Failed to initialize FST");
 		exitcode = -1;
@@ -356,6 +357,7 @@ int main(int argc, char *argv[])
 	}
 
 #if defined(CONFIG_FST) && defined(CONFIG_CTRL_IFACE)
+	printf("*fflq %s, before fst_global_init\n", __func__) ;
 	if (!fst_global_add_ctrl(fst_ctrl_cli))
 		wpa_printf(MSG_WARNING, "Failed to add CLI FST ctrl");
 #endif
@@ -388,6 +390,7 @@ int main(int argc, char *argv[])
 		exitcode = wpa_supplicant_init_match(global);
 #endif /* CONFIG_MATCH_IFACE */
 
+	printf("*fflq %s, before wpa_supplicant_run\n", __func__) ;
 	if (exitcode == 0)
 		exitcode = wpa_supplicant_run(global);
 

@@ -24,17 +24,6 @@
 #include "beacon.h"
 #include "hw_features.h"
 
-static void ieee80211n_do_nothing(struct hostapd_iface *iface)
-{
-			wpa_printf(MSG_DEBUG,
-				   "Scan finished!");
-}
-
-static void ieee80211n_scan_channels_2g4(struct hostapd_iface *iface,
-					 struct wpa_driver_scan_params *params);
-static void ieee80211n_scan_channels_5g(struct hostapd_iface *iface,
-					struct wpa_driver_scan_params *params);
-
 
 void hostapd_free_hw_features(struct hostapd_hw_modes *hw_features,
 			      size_t num_hw_features)
@@ -93,33 +82,6 @@ int hostapd_get_hw_features(struct hostapd_iface *iface)
 
 	if (hostapd_drv_none(hapd))
 		return -1;
-
-
-
-        // scan
-	struct wpa_driver_scan_params params;
-	int ret1;
-
-	os_memset(&params, 0, sizeof(params));
-	ieee80211n_scan_channels_5g(iface, &params);
-
-	ret1 = hostapd_driver_scan(iface->bss[0], &params);
-
-        if (ret1 == -EBUSY) {
-                wpa_printf(MSG_ERROR,
-                           "Failed to request a scan of neighboring BSSes ret=%d (%s)!",
-                           ret1, strerror(-ret1));
-        }
-
-        if (ret1 == 0) {
-                iface->scan_cb = ieee80211n_do_nothing;
-                wpa_printf(MSG_DEBUG,
-                           "Sleeping...");
-                for (int i=0; i<110; i++) {
-                  usleep(100000);
-                }
-        }
-
 	modes = hostapd_get_hw_feature_data(hapd, &num_modes, &flags,
 					    &dfs_domain);
 	if (modes == NULL) {
@@ -346,6 +308,7 @@ static int ieee80211n_check_40mhz_2g4(struct hostapd_iface *iface,
 			       sec_chan);
 }
 
+
 static void ieee80211n_check_scan(struct hostapd_iface *iface)
 {
 	struct wpa_scan_results *scan_res;
@@ -554,10 +517,8 @@ static int ieee80211n_check_40mhz(struct hostapd_iface *iface)
 	int ret;
 
 	/* Check that HT40 is used and PRI / SEC switch is allowed */
-	if (!iface->conf->secondary_channel || iface->conf->no_pri_sec_switch || iface->conf->noscan) {
-                wpa_printf(MSG_DEBUG, "Not scanning due to noscan?");
+	if (!iface->conf->secondary_channel || iface->conf->no_pri_sec_switch)
 		return 0;
-        }
 
 	hostapd_set_state(iface, HAPD_IFACE_HT_SCAN);
 	wpa_printf(MSG_DEBUG, "Scan for neighboring BSSes prior to enabling "
@@ -954,7 +915,7 @@ static int hostapd_is_usable_chans(struct hostapd_iface *iface)
 	if (!hostapd_is_usable_edmg(iface))
 		return 0;
 
-	if (!iface->conf->secondary_channel || iface->conf->noscan)
+	if (!iface->conf->secondary_channel)
 		return 1;
 
 	if (hostapd_is_usable_chan(iface, iface->freq +

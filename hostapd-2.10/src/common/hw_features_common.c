@@ -388,6 +388,7 @@ int hostapd_set_freq_params(struct hostapd_freq_params *data,
 			    int center_segment1, u32 vht_caps,
 			    struct he_capabilities *he_cap)
 {
+	printf("*fflq %s\n", __func__) ;
 	if (!he_cap || !he_cap->he_supported)
 		he_enabled = 0;
 	os_memset(data, 0, sizeof(*data));
@@ -571,6 +572,7 @@ int hostapd_set_freq_params(struct hostapd_freq_params *data,
 				   "80/80+80 MHz: no second channel offset");
 			return -1;
 		}
+		//fflq here
 		if (oper_chwidth == CHANWIDTH_80MHZ && center_segment1) {
 			wpa_printf(MSG_ERROR,
 				   "80 MHz: center segment 1 configured");

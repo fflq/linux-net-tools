@@ -1007,6 +1007,7 @@ static int print_event(struct nl_msg *msg, void *arg)
 		printf("got scheduled scan results\n");
 		break;
 	case NL80211_CMD_WIPHY_REG_CHANGE:
+	//fflq regulatory domain change
 	case NL80211_CMD_REG_CHANGE:
 		if (gnlh->cmd == NL80211_CMD_WIPHY_REG_CHANGE)
 			printf("regulatory domain change (phy): ");
@@ -1015,6 +1016,7 @@ static int print_event(struct nl_msg *msg, void *arg)
 
 		reg_type = nla_get_u8(tb[NL80211_ATTR_REG_TYPE]);
 
+		//fflq regulatory domain set to 
 		switch (reg_type) {
 		case NL80211_REGDOM_TYPE_COUNTRY:
 			printf("set to %s by %s request",

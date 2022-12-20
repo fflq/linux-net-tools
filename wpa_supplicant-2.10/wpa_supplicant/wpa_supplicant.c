@@ -5350,6 +5350,7 @@ int wpa_supplicant_driver_init(struct wpa_supplicant *wpa_s)
 
 static int wpa_supplicant_daemon(const char *pid_file)
 {
+	printf("*fflq %s\n", __func__) ;
 	wpa_printf(MSG_DEBUG, "Daemonize..");
 	return os_daemonize(pid_file);
 }
@@ -7454,21 +7455,25 @@ int wpa_supplicant_run(struct wpa_global *global)
 {
 	struct wpa_supplicant *wpa_s;
 
+	printf("*fflq %s, before wpa_supplicant_daemon\n", __func__) ; 
 	if (global->params.daemonize &&
 	    (wpa_supplicant_daemon(global->params.pid_file) ||
 	     eloop_sock_requeue()))
 		return -1;
 
 #ifdef CONFIG_MATCH_IFACE
+	printf("*fflq %s, before wpa_supplicant_match_existing\n", __func__) ;
 	if (wpa_supplicant_match_existing(global))
 		return -1;
 #endif
 
 	if (global->params.wait_for_monitor) {
 		for (wpa_s = global->ifaces; wpa_s; wpa_s = wpa_s->next)
-			if (wpa_s->ctrl_iface && !wpa_s->p2p_mgmt)
+			if (wpa_s->ctrl_iface && !wpa_s->p2p_mgmt) {
+				printf("*fflq %s, before wpa_supplicant_ctrl_iface_wait\n", __func__) ;
 				wpa_supplicant_ctrl_iface_wait(
 					wpa_s->ctrl_iface);
+			}
 	}
 
 	eloop_register_signal_terminate(wpa_supplicant_terminate, global);

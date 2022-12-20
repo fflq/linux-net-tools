@@ -672,6 +672,7 @@ static int eloop_sock_table_requeue(struct eloop_sock_table *table)
 
 int eloop_sock_requeue(void)
 {
+	printf("*fflq %s\n", __func__) ;
 	int r = 0;
 
 #ifdef CONFIG_ELOOP_KQUEUE
@@ -1070,6 +1071,7 @@ int eloop_register_signal_reconfig(eloop_signal_handler handler,
 
 void eloop_run(void)
 {
+	printf("*fflq %s, often stuck\n", __func__) ;
 #ifdef CONFIG_ELOOP_POLL
 	int num_poll_fds;
 	int timeout_ms = 0;

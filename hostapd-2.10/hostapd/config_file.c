@@ -2906,8 +2906,6 @@ static int hostapd_config_fill(struct hostapd_config *conf,
 				   line, bss->wpa_deny_ptk0_rekey);
 			return 1;
 		}
-    } else if (os_strcmp(buf, "noscan") == 0) {
-        conf->noscan = atoi(pos);
 	} else if (os_strcmp(buf, "wpa_group_update_count") == 0) {
 		char *endp;
 		unsigned long val = strtoul(pos, &endp, 0);
@@ -3476,8 +3474,6 @@ static int hostapd_config_fill(struct hostapd_config *conf,
 		if (bss->ocv && !bss->ieee80211w)
 			bss->ieee80211w = 1;
 #endif /* CONFIG_OCV */
-    } else if (os_strcmp(buf, "noscan") == 0) {
-        conf->noscan = atoi(pos);
 	} else if (os_strcmp(buf, "ieee80211n") == 0) {
 		conf->ieee80211n = atoi(pos);
 	} else if (os_strcmp(buf, "ht_capab") == 0) {

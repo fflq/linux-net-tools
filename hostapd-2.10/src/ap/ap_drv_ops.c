@@ -568,6 +568,7 @@ int hostapd_set_freq(struct hostapd_data *hapd, enum hostapd_hw_mode mode,
 		return 0;
 	if (hapd->driver->set_freq == NULL)
 		return 0;
+	printf("*fflq %s, call hadp->driver->set_freq\n", __func__) ;
 	return hapd->driver->set_freq(hapd->drv_priv, &data);
 }
 

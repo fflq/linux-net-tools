@@ -2073,6 +2073,7 @@ static int hostapd_setup_interface_complete_sync(struct hostapd_iface *iface,
 					     hapd->iconf),
 				     hostapd_get_oper_centr_freq_seg1_idx(
 					     hapd->iconf))) {
+			//fflq set channel for kernel driver failed
 			wpa_printf(MSG_ERROR, "Could not set channel for "
 				   "kernel driver");
 			goto fail;
